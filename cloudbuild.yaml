@@ -6,7 +6,7 @@ steps:
 
   - id: go_tidy
     name: "gcr.io/cloud-builders/go"
-    args: ["mod","tidy"]
+    args: ["mod","tidy","./src/"]
     env: ["GOPATH=."]
 
   - id: go_run
