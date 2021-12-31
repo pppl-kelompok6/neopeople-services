@@ -5,7 +5,7 @@ steps:
     env: ["GOPATH=."]
 
   - id: cd_directory
-    name: "gcr.io/cloud-builders/go"
+    name: "gcr.io/cloud-builders/git"
     args: 
     - '-c'
     - |
