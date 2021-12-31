@@ -9,7 +9,7 @@ import (
 )
 
 func Services(router *mux.Router) {
-	staticDir := "/static/"
+	staticDir := "/src/static/"
 	router.PathPrefix(staticDir).Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
 
 }

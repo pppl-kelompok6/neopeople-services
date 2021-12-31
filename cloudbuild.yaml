@@ -2,4 +2,4 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
 args: ['functions', 'deploy','testCd','--entry-point','TestRequest', '--runtime','go111','--trigger-http']
 env: ['GOPATH=.']
-dir: './'
+dir: './src'
