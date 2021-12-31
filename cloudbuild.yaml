@@ -8,7 +8,7 @@ steps:
     name: "gcr.io/cloud-builders/go"
     args: ["mod","tidy"]
     env: ["GOPATH=."]
-    dir: "src"
+    
 
   - id: go_run
     name: "gcr.io/cloud-builders/go"
