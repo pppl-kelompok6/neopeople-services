@@ -1,18 +1,13 @@
-module neopeople-services
+module neopoeple-gcp
 
 go 1.17
 
 require (
-	github.com/cloudinary/cloudinary-go v1.5.0 // indirect
 	github.com/cosmtrek/air v1.27.8 // indirect
-	github.com/creasty/defaults v1.5.2 // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
-	github.com/gorilla/schema v1.2.0 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
