@@ -1,6 +1,5 @@
 steps:
-  - id: go_version
-    name: "gcr.io/cloud-builders/go"
-    args: ["version"]
-    env: ["GOPATH=."]
-  
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['functions', 'deploy','testCd','--entry-point','TestRequest', '--runtime','go111','--trigger-http']
+    env: ['GOPATH=/gopath']
+    dir: './src'
