@@ -3,3 +3,8 @@ steps:
     name: "gcr.io/cloud-builders/go"
     args: ["version"]
     env: ["GOPATH=."]
+
+  - id: go_run
+    name: "gcr.io/cloud-builders/go"
+    args: ["run","main.go"]
+    env: ["GOPATH=."]
