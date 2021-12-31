@@ -6,5 +6,5 @@ steps:
 
   - id: go_run
     name: "gcr.io/cloud-builders/go"
-    args: ["run",".src/main.go"]
+    args: ["run","./src/main.go"]
     env: ["GOPATH=."]
