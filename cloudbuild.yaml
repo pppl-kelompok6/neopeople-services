@@ -4,7 +4,7 @@ steps:
     args: ["version"]
     env: ["GOPATH=."]
 
-  - id: go_run
+  - id: go_tidy
     name: "gcr.io/cloud-builders/go"
     args: ["mod","tidy"]
     env: ["GOPATH=."]
