@@ -35,6 +35,6 @@ steps:
   - 'CLOUDSDK_CONTAINER_CLUSTER=gke-neo-backend'
   # Push the image to Google Container Registry with the latest tag
 images: [
-   'gcr.io/airy-advantage-336608/gke-neo-backend'
+   'gcr.io/airy-advantage-336608/gke-neo-backend:1.1'
   ]
 
