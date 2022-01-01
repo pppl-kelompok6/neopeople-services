@@ -14,7 +14,7 @@ steps:
     # env: ["GOPATH=."]
 
   - id: go_run
-    name: "gcr.io/cloud-builders/go"
+    name: "golang"
     args: ["run","./main.go"]
     # env: ["GOPATH=."]
 
