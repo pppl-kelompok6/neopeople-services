@@ -16,7 +16,7 @@ steps:
   - id: go_run
     name: "gcr.io/cloud-builders/go"
     args: ["run","./main.go"]
-    env: ["GOPATH=."]
+    # env: ["GOPATH=."]
 
 options:
   volumes:
