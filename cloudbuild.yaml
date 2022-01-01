@@ -4,13 +4,17 @@ steps:
     args: ["version"]
     env: ["GOPATH=."]
 
-  # - id: go_init
+  - id: go_init
+    name: "golang"
+    args: ["cd", "src", "&&", "go","mod","init","github.com/golang/glog"]
+    env: ["GOPATH=."]
+
+  # - id: go_run
   #   name: "gcr.io/cloud-builders/go"
-  #   args: ["cd","src", "&&", "mod", ""]
+  #   args: ["run","./src/main.go"]
   #   env: ["GOPATH=."]
 
-
-  - id: go_run
-    name: "gcr.io/cloud-builders/go"
-    args: ["run","./src/main.go"]
-    env: ["GOPATH=."]
+options:
+  volumes:
+  - name: go-modules
+    path: /go
