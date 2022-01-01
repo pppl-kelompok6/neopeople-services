@@ -6,7 +6,7 @@ steps:
 
   - id: go_init
     name: "golang"
-    args: ["cd", "src", "&&", "go","mod","init","github.com/golang/glog"]
+    args: ["go","mod","init","github.com/golang/glog"]
     env: ["GOPATH=."]
 
   # - id: go_run
