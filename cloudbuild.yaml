@@ -7,7 +7,11 @@ steps:
   - id: go_init
     name: "golang"
     args: ["go","mod","init","github.com/golang/glog"]
-    env: ["GOPATH=."]
+    
+  - id: go_show
+    name: 'golang'
+    args: ['go','list','-f','{{ .Dir }}','-m','github.com/golang/glog']
+    # env: ["GOPATH=."]
 
   # - id: go_run
   #   name: "gcr.io/cloud-builders/go"
