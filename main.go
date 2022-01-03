@@ -35,6 +35,7 @@ func InitDB() {
 	if err != nil {
 		panic(err.Error())
 	}
+	// database.Migrate()
 }
 
 func main() {
