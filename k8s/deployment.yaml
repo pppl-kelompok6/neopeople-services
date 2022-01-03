@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: neo-backend
+  name: neo-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: neo-backend
+  template:
+    metadata:
+      labels:
+        run: neo-backend
+    spec:
+      containers:
+      - image: gcr.io/airy-advantage-336608/neo-backend:1.1
+        name: neo-backend
+        ports:
+        - containerPort: 8090

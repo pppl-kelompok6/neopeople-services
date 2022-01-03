@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: neo-backend
+spec:
+  selector:
+     run: neo-backend
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 8090
+  type: LoadBalancer
