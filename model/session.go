@@ -1,11 +1,16 @@
-package main
+package model
 
-import "time"
+import (
+	"gorm.io/gorm"
+)
 
-type session struct {
-	Date       time.Time `json:"date"`
-	Started_at time.Time `json:"started_at"`
-	Finish_at  time.Time `json:"finish_at"`
-	Title      string    `json:"title"`
-	Platform   string    `json:"platform"`
+type Session struct {
+	gorm.Model
+	Date      string      `json:"date" gorm:"type:date"`
+	StartedAt string      `json:"started_at" gorm:"type:datetime"`
+	FinishAt  string      `json:"finish_at" gorm:"type:datetime"`
+	Title     string      `json:"title" gorm:"type:varchar(100)"`
+	Platform  string      `json:"platform" gorm:"type:varchar(255)"`
+	Counselor []Counselor `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Pantient  []Pantient  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
