@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -13,8 +12,7 @@ func Authorization(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		if r.Header["Token"] == nil {
-			err := errors.New("no Token Found")
-			json.NewEncoder(w).Encode(err)
+			json.NewEncoder(w).Encode("no Token Found")
 			return
 		}
 		// fmt.Println(r.Header["Token"])
@@ -33,8 +31,8 @@ func Authorization(handler http.HandlerFunc) http.HandlerFunc {
 		if err != nil {
 			fmt.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)
-			err := errors.New("your Token has been expired")
-			json.NewEncoder(w).Encode(err)
+
+			json.NewEncoder(w).Encode("your Token has been expired")
 			return
 		}
 
@@ -52,8 +50,8 @@ func Authorization(handler http.HandlerFunc) http.HandlerFunc {
 			}
 		}
 
-		err = errors.New("no Authorization")
-		json.NewEncoder(w).Encode(err)
+		// err = errors.New("no Authorization")
+		json.NewEncoder(w).Encode("No Authorization")
 	}
 }
 

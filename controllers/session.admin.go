@@ -49,12 +49,10 @@ func GetSessionByID(w http.ResponseWriter, r *http.Request) {
 
 func CreateSession(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
-
 	var session model.Session
 
-	json.Unmarshal(reqBody, &session)
-
-	err := json.NewDecoder(r.Body).Decode(&session)
+	// err := json.NewDecoder(r.Body).Decode(&session)
+	err := json.Unmarshal(reqBody, &session)
 
 	if err != nil {
 		fmt.Println(err)
@@ -64,7 +62,7 @@ func CreateSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.Connector.Create(session).Error
+	err = database.Connector.Create(&session).Error
 	if err != nil {
 		fmt.Println(err)
 		w.Header().Set("Content-Type", "application/json")
@@ -86,8 +84,7 @@ func UpdateSesionById(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)
 	key := id["id"]
 
-	json.Unmarshal(reqBody, &sessionUpdate)
-	err := json.NewDecoder(r.Body).Decode(&sessionUpdate)
+	err := json.Unmarshal(reqBody, &sessionUpdate)
 
 	if err != nil {
 		fmt.Println(err)

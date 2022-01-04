@@ -5,6 +5,7 @@ import (
 	"log"
 	"neopeople-service/controllers"
 	"neopeople-service/database"
+	"neopeople-service/middleware"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -13,11 +14,25 @@ import (
 func Services(router *mux.Router) {
 	staticDir := "/static/"
 	router.PathPrefix(staticDir).Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
-	router.HandleFunc("/events", controllers.CreateEvent).Methods("POST")
+
+	// auth
+	router.HandleFunc("/login", controllers.Login).Methods("POST")
+	router.HandleFunc("/register", controllers.Register).Methods("POST")
+
+	// events
+	router.HandleFunc("/events", middleware.Authorization(controllers.CreateEvent)).Methods("POST")
 	router.HandleFunc("/events", controllers.GetEventAll).Methods("GET")
-	router.HandleFunc("/events/{id}", controllers.GetEventByID).Methods("GET")
-	router.HandleFunc("/events/{id}", controllers.UpdateEventById).Methods("PUT")
-	router.HandleFunc("/events/{id}", controllers.DeleteEventById).Methods("DELETE")
+	router.HandleFunc("/events/{id}", middleware.Authorization(controllers.GetEventByID)).Methods("GET")
+	router.HandleFunc("/events/{id}", middleware.Authorization(controllers.UpdateEventById)).Methods("PUT")
+	router.HandleFunc("/events/{id}", middleware.Authorization(controllers.DeleteEventById)).Methods("DELETE")
+
+	// session
+	router.HandleFunc("/session", middleware.Authorization(controllers.CreateSession)).Methods("POST")
+	router.HandleFunc("/session", controllers.GetSessionAll).Methods("GET")
+	router.HandleFunc("/session/{id}", middleware.Authorization(controllers.GetSessionByID)).Methods("GET")
+	router.HandleFunc("/session/{id}", middleware.Authorization(controllers.UpdateSesionById)).Methods("PUT")
+	router.HandleFunc("/session/{id}", middleware.Authorization(controllers.DeleteSessionById)).Methods("DELETE")
+
 }
 
 func RouterStart() {
