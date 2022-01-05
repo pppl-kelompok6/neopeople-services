@@ -39,10 +39,10 @@ func Services(router *mux.Router) {
 
 func RouterStart() {
 	router := mux.NewRouter().StrictSlash(true)
-	fmt.Println(`Running on port 8090`)
+	fmt.Println(`Running on port 3001`)
 	Services(router)
 	loggedRouter := handlers.CombinedLoggingHandler(os.Stdout, router)
-	log.Fatal(http.ListenAndServe(":8090", loggedRouter))
+	log.Fatal(http.ListenAndServe(":3001", loggedRouter))
 }
 
 func InitDB() {
@@ -62,7 +62,7 @@ func InitDB() {
 	if err != nil {
 		panic(err.Error())
 	}
-	// database.Migrate()
+	database.Migrate()
 }
 
 func main() {
