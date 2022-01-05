@@ -7,4 +7,3 @@ import (
 func GetAttendanceAll(w http.ResponseWriter, r *http.Request) {
 
 }
-
