@@ -31,13 +31,14 @@ func GetEventAll(w http.ResponseWriter, r *http.Request) {
 
 func GetEventByID(w http.ResponseWriter, r *http.Request) {
 	var event []model.Event
+	id := mux.Vars(r)
+	key := id["id"]
 
-	err := database.Connector.Preload("Attendance").Preload("Pantient").Find(&event).Error
-
+	err := database.Connector.Preload("Attendance").Preload("EventOrder").Find(&event, "events.id = ?", key).Error
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("line 39")
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(err)
 		return
 	}
@@ -52,21 +53,19 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 
 	var event model.Event
 
-	json.Unmarshal(reqBody, &event)
-
-	err := json.NewDecoder(r.Body).Decode(&event)
+	err := json.Unmarshal(reqBody, &event)
 
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("line 60")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(err)
 		return
 	}
 
-	err = database.Connector.Create(event).Error
+	err = database.Connector.Create(&event).Error
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("(line 69")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(err)
@@ -86,11 +85,10 @@ func UpdateEventById(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)
 	key := id["id"]
 
-	json.Unmarshal(reqBody, &eventUpdate)
-	err := json.NewDecoder(r.Body).Decode(&eventUpdate)
+	err := json.Unmarshal(reqBody, &eventUpdate)
 
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("line 92")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(err)

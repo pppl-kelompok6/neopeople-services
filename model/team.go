@@ -11,6 +11,6 @@ type Team struct {
 	PhoneNumber string `json:"phone_number" gorm:"type:varchar(20);unique_index"`
 	Occupation  string `json:"occupation" gorm:"type:varchar(100)"`
 	Company     string `json:"company" gorm:"type:varchar(100)"`
-	Position    string `json:"position" gorm:"type:varchar(20)"`
+	Position    string `json:"position" gorm:"type:ENUM('CEO', 'Founder', 'Mentor', 'PublicRelation','Team', Admin)"`
 	Photo       string `json:"photo" gorm:"type:varchar(255)"`
 }
