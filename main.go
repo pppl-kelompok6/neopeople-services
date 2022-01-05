@@ -48,14 +48,14 @@ func RouterStart() {
 func InitDB() {
 	config :=
 		database.Config{
-			ServerName: "34.69.20.223:3306",
-			User:       "staggingUser",
-			Pass:       "@WTx3GV^@7aJk9m2",
+			// 	ServerName: "34.69.20.223:3306",
+			// 	User:       "staggingUser",
+			// 	Pass:       "@WTx3GV^@7aJk9m2",
+			// 	DB:         "neo_stagging",
+			ServerName: "localhost:3300",
+			User:       "root",
+			Pass:       "",
 			DB:         "neo_stagging",
-			// ServerName: "localhost:3306",
-			// User:       "root",
-			// Pass:       "",
-			// DB:         "neo_stagging",
 		}
 	connectionString := database.GetConnectionString(config)
 	err := database.Connect((connectionString))
