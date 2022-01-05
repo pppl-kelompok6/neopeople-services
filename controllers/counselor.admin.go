@@ -11,28 +11,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func GetAttendanceAll(w http.ResponseWriter, r *http.Request) {
-	var attendance []model.Attendance
+func GetCounselorAll(w http.ResponseWriter, r *http.Request) {
+	var counselor []model.Counselor
 
-	err := database.Connector.Find(&attendance).Error
-
-	if err != nil {
-		fmt.Println(err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(attendance)
-}
-
-func GetAttendanceByID(w http.ResponseWriter, r *http.Request) {
-	var attendance []model.Attendance
-
-	err := database.Connector.Preload("Counselor").Preload("Pantient").Find(&attendance).Error
+	err := database.Connector.Find(&counselor).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -44,17 +26,35 @@ func GetAttendanceByID(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(attendance)
+	json.NewEncoder(w).Encode(counselor)
 }
 
-func CreateAttendance(w http.ResponseWriter, r *http.Request) {
+func GetCounselorByID(w http.ResponseWriter, r *http.Request) {
+	var counselor []model.Counselor
+
+	err := database.Connector.Preload("Attendance").Preload("Pantient").Find(&counselor).Error
+
+	if err != nil {
+		fmt.Println(err)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(counselor)
+}
+
+func CreateCounselor(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 
-	var attendance model.Attendance
+	var counselor model.Counselor
 
-	json.Unmarshal(reqBody, &attendance)
+	json.Unmarshal(reqBody, &counselor)
 
-	err := json.NewDecoder(r.Body).Decode(&attendance)
+	err := json.NewDecoder(r.Body).Decode(&counselor)
 
 	if err != nil {
 		fmt.Println(err)
@@ -64,7 +64,7 @@ func CreateAttendance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.Connector.Create(attendance).Error
+	err = database.Connector.Create(counselor).Error
 	if err != nil {
 		fmt.Println(err)
 		w.Header().Set("Content-Type", "application/json")
@@ -74,20 +74,20 @@ func CreateAttendance(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode("Attendance has been created")
+	json.NewEncoder(w).Encode("Counselor has been created")
 
 }
 
-func UpdateAttendanceById(w http.ResponseWriter, r *http.Request) {
+func UpdateCounselorById(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 
-	var attendanceUpdate model.Attendance
-	var attendance model.Event
+	var counselorUpdate model.Counselor
+	var counselor model.Counselor
 	id := mux.Vars(r)
 	key := id["id"]
 
-	json.Unmarshal(reqBody, &attendanceUpdate)
-	err := json.NewDecoder(r.Body).Decode(&attendanceUpdate)
+	json.Unmarshal(reqBody, &counselorUpdate)
+	err := json.NewDecoder(r.Body).Decode(&counselorUpdate)
 
 	if err != nil {
 		fmt.Println(err)
@@ -97,7 +97,7 @@ func UpdateAttendanceById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.Connector.First(&attendance, key).Error
+	err = database.Connector.First(&counselor, key).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -107,7 +107,7 @@ func UpdateAttendanceById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.Connector.Model(&attendance).Updates(&attendanceUpdate).Error
+	err = database.Connector.Model(&counselor).Updates(&counselorUpdate).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -119,16 +119,16 @@ func UpdateAttendanceById(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode("Session has been updated")
+	json.NewEncoder(w).Encode("Counselor has been updated")
 
 }
 
-func DeleteAttendanceById(w http.ResponseWriter, r *http.Request) {
+func DeleteCounselorById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	var attendance model.Attendance
-	err := database.Connector.First(&attendance, id).Error
+	var counselor model.Counselor
+	err := database.Connector.First(&counselor, id).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -138,9 +138,9 @@ func DeleteAttendanceById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	database.Connector.Delete(&attendance)
+	database.Connector.Delete(&counselor)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode("Attendance has been deleted")
+	json.NewEncoder(w).Encode("Counselor has been deleted")
 }
