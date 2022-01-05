@@ -11,28 +11,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func GetAttendanceAll(w http.ResponseWriter, r *http.Request) {
-	var attendance []model.Attendance
+func GetTeamAll(w http.ResponseWriter, r *http.Request) {
+	var team []model.Team
 
-	err := database.Connector.Find(&attendance).Error
-
-	if err != nil {
-		fmt.Println(err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(attendance)
-}
-
-func GetAttendanceByID(w http.ResponseWriter, r *http.Request) {
-	var attendance []model.Attendance
-
-	err := database.Connector.Preload("Counselor").Preload("Pantient").Find(&attendance).Error
+	err := database.Connector.Find(&team).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -44,17 +26,35 @@ func GetAttendanceByID(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(attendance)
+	json.NewEncoder(w).Encode(team)
 }
 
-func CreateAttendance(w http.ResponseWriter, r *http.Request) {
+func GetTeamByID(w http.ResponseWriter, r *http.Request) {
+	var team []model.Team
+
+	err := database.Connector.Preload("Attendance").Preload("Pantient").Find(&team).Error
+
+	if err != nil {
+		fmt.Println(err)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(team)
+}
+
+func CreateTeam(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 
-	var attendance model.Attendance
+	var team model.Team
 
-	json.Unmarshal(reqBody, &attendance)
+	json.Unmarshal(reqBody, &team)
 
-	err := json.NewDecoder(r.Body).Decode(&attendance)
+	err := json.NewDecoder(r.Body).Decode(&team)
 
 	if err != nil {
 		fmt.Println(err)
@@ -64,7 +64,7 @@ func CreateAttendance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.Connector.Create(attendance).Error
+	err = database.Connector.Create(team).Error
 	if err != nil {
 		fmt.Println(err)
 		w.Header().Set("Content-Type", "application/json")
@@ -74,20 +74,20 @@ func CreateAttendance(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode("Attendance has been created")
+	json.NewEncoder(w).Encode("Team has been created")
 
 }
 
-func UpdateAttendanceById(w http.ResponseWriter, r *http.Request) {
+func UpdateTeamById(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 
-	var attendanceUpdate model.Attendance
-	var attendance model.Event
+	var teamUpdate model.Team
+	var team model.Team
 	id := mux.Vars(r)
 	key := id["id"]
 
-	json.Unmarshal(reqBody, &attendanceUpdate)
-	err := json.NewDecoder(r.Body).Decode(&attendanceUpdate)
+	json.Unmarshal(reqBody, &teamUpdate)
+	err := json.NewDecoder(r.Body).Decode(&teamUpdate)
 
 	if err != nil {
 		fmt.Println(err)
@@ -97,7 +97,7 @@ func UpdateAttendanceById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.Connector.First(&attendance, key).Error
+	err = database.Connector.First(&team, key).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -107,7 +107,7 @@ func UpdateAttendanceById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.Connector.Model(&attendance).Updates(&attendanceUpdate).Error
+	err = database.Connector.Model(&team).Updates(&teamUpdate).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -119,16 +119,16 @@ func UpdateAttendanceById(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode("Session has been updated")
+	json.NewEncoder(w).Encode("Team has been updated")
 
 }
 
-func DeleteAttendanceById(w http.ResponseWriter, r *http.Request) {
+func DeleteTeamById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	var attendance model.Attendance
-	err := database.Connector.First(&attendance, id).Error
+	var team model.Team
+	err := database.Connector.First(&team, id).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -138,9 +138,9 @@ func DeleteAttendanceById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	database.Connector.Delete(&attendance)
+	database.Connector.Delete(&team)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode("Attendance has been deleted")
+	json.NewEncoder(w).Encode("Team has been deleted")
 }
