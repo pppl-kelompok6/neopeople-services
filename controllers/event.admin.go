@@ -1,17 +1,13 @@
 package controllers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"neopeople-service/cdn"
 	"neopeople-service/database"
 	"neopeople-service/model"
 	"net/http"
-	"strconv"
 
-	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"github.com/gorilla/mux"
 )
 
@@ -53,81 +49,28 @@ func GetEventByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateEvent(w http.ResponseWriter, r *http.Request) {
+	reqBody, _ := ioutil.ReadAll(r.Body)
 
-	file, _, err := r.FormFile("file")
-
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("line 60")
-		fmt.Println(err)
-		return
-	}
-
-	event_name := r.FormValue("event_name")
-	date := r.FormValue("date")
-	started_at := r.FormValue("started_at")
-	finish_at := r.FormValue("finish_at")
-	price := r.FormValue("price")
-	speaker := r.FormValue("speaker")
-	speaker_job := r.FormValue("speaker_job")
-	speaker_company := r.FormValue("speaker_company")
-	description := r.FormValue("description")
-
-	defer file.Close()
-
-	cld, err := cdn.CdnSetting()
-	var ctx = context.Background()
-
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("line 82")
-		fmt.Println("error open file", err)
-		return
-	}
-
-	uploadResult, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{})
-
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("line 91")
-		fmt.Println("error read file", err)
-		return
-	}
-
-	cover := uploadResult.SecureURL
-	fmt.Println(cover)
 	var event model.Event
 
-	event.EventName = event_name
-	event.Cover = cover
-	event.Date = date
-	event.StartedAt = started_at
-	event.Description = description
-	event.SpeakerJob = speaker_job
-	event.SpeakerCompany = speaker_company
-	event.Speaker = speaker
-	event.FinishAt = finish_at
-	event.Price, _ = strconv.Atoi(price)
+	err := json.Unmarshal(reqBody, &event)
 
-	// err = json.Unmarshal(reqBody, &event)
-	fmt.Println("ini")
-	fmt.Println(event)
-	// if err != nil {
-	// 	fmt.Println("line 60")
-	// 	w.Header().Set("Content-Type", "application/json")
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	json.NewEncoder(w).Encode(err)
-	// 	return
-	// }
+	if err != nil {
+		fmt.Println("line 60")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
 
-	// err = database.Connector.Create(&event).Error
-	// if err != nil {
-	// 	fmt.Println("(line 69")
-	// 	w.Header().Set("Content-Type", "application/json")
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	json.NewEncoder(w).Encode(err)
-	// 	return
-	// }
+	err = database.Connector.Create(&event).Error
+	if err != nil {
+		fmt.Println("(line 69")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode("Event has been created")
