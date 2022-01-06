@@ -7,7 +7,6 @@ import (
 	"neopeople-service/database"
 	"neopeople-service/middleware"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -23,8 +22,8 @@ func Services(router *mux.Router) {
 
 	// events
 	router.HandleFunc("/events", middleware.Authorization(controllers.CreateEvent)).Methods("POST")
-	router.HandleFunc("/events", controllers.GetEventAll).Methods("GET")
-	router.HandleFunc("/events/{id}", middleware.Authorization(controllers.GetEventByID)).Methods("GET")
+	router.HandleFunc("/events", middleware.Authorization(controllers.GetEventAll)).Methods("GET")
+	router.HandleFunc("/events/{id}", controllers.GetEventByID).Methods("GET")
 	router.HandleFunc("/events/{id}", middleware.Authorization(controllers.UpdateEventById)).Methods("PUT")
 	router.HandleFunc("/events/{id}", middleware.Authorization(controllers.DeleteEventById)).Methods("DELETE")
 
@@ -41,8 +40,12 @@ func RouterStart() {
 	router := mux.NewRouter().StrictSlash(true)
 	fmt.Println(`Running on port 3001`)
 	Services(router)
-	loggedRouter := handlers.CombinedLoggingHandler(os.Stdout, router)
-	log.Fatal(http.ListenAndServe(":3001", loggedRouter))
+	// loggedRouter := handlers.CombinedLoggingHandler(os.Stdout, router)
+	log.Fatal(http.ListenAndServe(":3001", handlers.CORS(
+		// handlers.AllowOrigin([]string{"*"}),
+		handlers.AllowedMethods([]string{"POST", "GET", "DELETE", "PUT"}),
+		handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With"}),
+	)(router)))
 }
 
 func InitDB() {
@@ -54,7 +57,7 @@ func InitDB() {
 			// 	DB:         "neo_stagging",
 			ServerName: "localhost:3306",
 			User:       "root",
-			Pass:       "password",
+			Pass:       "",
 			DB:         "neo_stagging",
 		}
 	connectionString := database.GetConnectionString(config)
@@ -62,7 +65,7 @@ func InitDB() {
 	if err != nil {
 		panic(err.Error())
 	}
-	database.Migrate()
+	// database.Migrate()
 }
 
 func main() {

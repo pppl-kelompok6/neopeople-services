@@ -32,7 +32,7 @@ func Authorization(handler http.HandlerFunc) http.HandlerFunc {
 			fmt.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)
 
-			json.NewEncoder(w).Encode("your Token has been expired")
+			json.NewEncoder(w).Encode(err)
 			return
 		}
 
