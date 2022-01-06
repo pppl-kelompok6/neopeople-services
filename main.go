@@ -57,7 +57,7 @@ func InitDB() {
 			// 	DB:         "neo_stagging",
 			ServerName: "localhost:3306",
 			User:       "root",
-			Pass:       "",
+			Pass:       "password",
 			DB:         "neo_stagging",
 		}
 	connectionString := database.GetConnectionString(config)
