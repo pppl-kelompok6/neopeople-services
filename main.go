@@ -23,7 +23,7 @@ func Services(router *mux.Router) {
 	// events
 	router.HandleFunc("/events", middleware.Authorization(controllers.CreateEvent)).Methods("POST")
 	router.HandleFunc("/events", controllers.GetEventAll).Methods("GET")
-	router.HandleFunc("/events/admin/{id}", controllers.GetEventByID).Methods("GET")
+	router.HandleFunc("/events/{id}", controllers.GetEventByID).Methods("GET")
 	router.HandleFunc("/events/{id}", middleware.Authorization(controllers.UpdateEventById)).Methods("PUT")
 	router.HandleFunc("/events/{id}", middleware.Authorization(controllers.DeleteEventById)).Methods("DELETE")
 
@@ -43,6 +43,8 @@ func RouterStart() {
 	// loggedRouter := handlers.CombinedLoggingHandler(os.Stdout, router)
 	log.Fatal(http.ListenAndServe(":3001", handlers.CORS(
 		// handlers.AllowOrigin([]string{"*"}),
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowCredentials(),
 		handlers.AllowedMethods([]string{"POST", "GET", "DELETE", "PUT"}),
 		handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With"}),
 	)(router)))
@@ -57,7 +59,7 @@ func InitDB() {
 			// 	DB:         "neo_stagging",
 			ServerName: "localhost:3306",
 			User:       "root",
-			Pass:       "password",
+			Pass:       "",
 			DB:         "neo_stagging",
 		}
 	connectionString := database.GetConnectionString(config)
