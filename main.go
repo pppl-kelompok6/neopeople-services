@@ -22,13 +22,13 @@ func Services(router *mux.Router) {
 
 	// events
 	router.HandleFunc("/events", middleware.Authorization(controllers.CreateEvent)).Methods("POST")
-	router.HandleFunc("/events", middleware.Authorization(controllers.GetEventAll)).Methods("GET")
+	router.HandleFunc("/events", controllers.GetEventAll).Methods("GET")
 	router.HandleFunc("/events/{id}", controllers.GetEventByID).Methods("GET")
 	router.HandleFunc("/events/{id}", middleware.Authorization(controllers.UpdateEventById)).Methods("PUT")
 	router.HandleFunc("/events/{id}", middleware.Authorization(controllers.DeleteEventById)).Methods("DELETE")
 
 	// session
-	router.HandleFunc("/session", middleware.Authorization(controllers.CreateSession)).Methods("POST")
+	router.HandleFunc("/session", controllers.CreateSession).Methods("POST")
 	router.HandleFunc("/session", controllers.GetSessionAll).Methods("GET")
 	router.HandleFunc("/session/{id}", middleware.Authorization(controllers.GetSessionByID)).Methods("GET")
 	router.HandleFunc("/session/{id}", middleware.Authorization(controllers.UpdateSesionById)).Methods("PUT")
