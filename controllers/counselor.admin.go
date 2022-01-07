@@ -32,7 +32,7 @@ func GetCounselorAll(w http.ResponseWriter, r *http.Request) {
 func GetCounselorByID(w http.ResponseWriter, r *http.Request) {
 	var counselor []model.Counselor
 
-	err := database.Connector.Preload("Attendance").Preload("Pantient").Find(&counselor).Error
+	err := database.Connector.Find(&counselor).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -52,9 +52,7 @@ func CreateCounselor(w http.ResponseWriter, r *http.Request) {
 
 	var counselor model.Counselor
 
-	json.Unmarshal(reqBody, &counselor)
-
-	err := json.NewDecoder(r.Body).Decode(&counselor)
+	err := json.Unmarshal(reqBody, &counselor)
 
 	if err != nil {
 		fmt.Println(err)
@@ -64,7 +62,7 @@ func CreateCounselor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.Connector.Create(counselor).Error
+	err = database.Connector.Create(&counselor).Error
 	if err != nil {
 		fmt.Println(err)
 		w.Header().Set("Content-Type", "application/json")
@@ -86,8 +84,7 @@ func UpdateCounselorById(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)
 	key := id["id"]
 
-	json.Unmarshal(reqBody, &counselorUpdate)
-	err := json.NewDecoder(r.Body).Decode(&counselorUpdate)
+	err := json.Unmarshal(reqBody, &counselorUpdate)
 
 	if err != nil {
 		fmt.Println(err)

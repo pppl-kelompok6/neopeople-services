@@ -13,5 +13,5 @@ type Counselor struct {
 	Company     string `json:"company" gorm:"type:varchar(100)"`
 	Position    string `json:"position" gorm:"type:ENUM('CEO', 'Founder', 'Mentor', 'PublicRelation','Team')"`
 	Photo       string `json:"photo" gorm:"type:varchar(255)"`
-	SessionID   uint
+	SessionID   uint   `json:"session_id"`
 }

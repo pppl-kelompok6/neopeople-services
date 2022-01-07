@@ -52,9 +52,7 @@ func CreateAttendance(w http.ResponseWriter, r *http.Request) {
 
 	var attendance model.Attendance
 
-	json.Unmarshal(reqBody, &attendance)
-
-	err := json.NewDecoder(r.Body).Decode(&attendance)
+	err := json.Unmarshal(reqBody, &attendance)
 
 	if err != nil {
 		fmt.Println(err)
@@ -86,8 +84,7 @@ func UpdateAttendanceById(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)
 	key := id["id"]
 
-	json.Unmarshal(reqBody, &attendanceUpdate)
-	err := json.NewDecoder(r.Body).Decode(&attendanceUpdate)
+	err := json.Unmarshal(reqBody, &attendanceUpdate)
 
 	if err != nil {
 		fmt.Println(err)
