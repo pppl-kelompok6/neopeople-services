@@ -6,11 +6,10 @@ import (
 
 type Session struct {
 	gorm.Model
-	Date      string      `json:"date" gorm:"type:date"`
-	StartedAt string      `json:"started_at" gorm:"type:datetime"`
-	FinishAt  string      `json:"finish_at" gorm:"type:datetime"`
+	StartDate string      `json:"startdate" gorm:"type:datetime"`
+	EndDate   string      `json:"enddate" gorm:"type:datetime"`
 	Title     string      `json:"title" gorm:"type:varchar(100)"`
-	Platform  string      `json:"platform" gorm:"type:varchar(255)"`
+	Message   string      `json:"message" gorm:"type:varchar(255)"`
 	Counselor []Counselor `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Pantient  []Pantient  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

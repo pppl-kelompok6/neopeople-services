@@ -13,8 +13,9 @@ import (
 
 func GetSessionAll(w http.ResponseWriter, r *http.Request) {
 	var session []model.Session
+	// var newSession []model.Session
 
-	err := database.Connector.Find(&session).Error
+	err := database.Connector.Preload("Counselor").Find(&session).Error
 
 	if err != nil {
 		fmt.Println(err)
