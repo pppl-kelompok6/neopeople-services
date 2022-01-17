@@ -81,7 +81,7 @@ func UpdateSesionById(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 
 	var sessionUpdate model.Session
-	var session model.Event
+	var session model.Session
 	id := mux.Vars(r)
 	key := id["id"]
 
